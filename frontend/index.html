@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/dayz-icon.svg" />
+    <title>DayZ SAMP - Survive The Horror</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nosifer&family=Creepster&display=swap" rel="stylesheet">
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+      }
+      body {
+        background: #000;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      #app {
+        min-height: 100vh;
+        background: #000;
+      }
+    </style>
+  </head>
+  <body oncontextmenu="return false">
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+    <script>
+      (function() {
+        let devtoolsWarningShown = false;
+        
+        // Disable right click
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        // Disable keyboard shortcuts
+        document.addEventListener('keydown', e => {
+          if (
+            (e.ctrlKey && (e.key === 'u' || e.key === 's')) || // Ctrl+U, Ctrl+S
+            (e.ctrlKey && e.shiftKey && (e.key === 'i' || e.key === 'j' || e.key === 'c')) || // Ctrl+Shift+I/J/C
+            e.key === 'F12'
+          ) {
+            e.preventDefault();
+            return false;
+          }
+        });
+
+        // DevTools detection without auto-reload
+        const checkDevTools = () => {
+          const threshold = 160;
+          const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+          const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+          
+          if ((widthThreshold || heightThreshold) && !devtoolsWarningShown) {
+            devtoolsWarningShown = true;
+            console.warn('Developer tools detected');
+          }
+        };
+
+        // Check periodically but don't reload
+        setInterval(checkDevTools, 1000);
+
+        // Disable console in production
+        if (process.env.NODE_ENV === 'production') {
+          console.log = () => {};
+          console.info = () => {};
+          console.warn = () => {};
+          console.error = () => {};
+          console.debug = () => {};
+        }
+      })();
+    </script>
+  </body>
+</html>
